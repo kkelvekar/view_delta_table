@@ -1,20 +1,18 @@
-import os
 import pandas as pd
 from deltalake import DeltaTable
 from tabulate import tabulate
 
 # --- Your Azure Storage Details ---
 storage_account_name = "kkdevuksouthordersdl"
-storage_account_key  = "<>"
 container_name       = "raw"
-
-# Set the Azure Storage Account Key for deltalake
-os.environ["AZURE_STORAGE_ACCOUNT_KEY"] = storage_account_key
 
 def load_delta_to_df(path, columns=None, safe_cast=False):
     dt = DeltaTable(
         f"az://{container_name}/{path}",
-        storage_options={"account_name": storage_account_name}
+        storage_options={
+            "azure_storage_account_name": storage_account_name,
+            "use_azure_cli": "true"
+        }
     )
     arrow_table = dt.to_pyarrow_table(columns=columns)
     if safe_cast:
@@ -39,13 +37,10 @@ df_current = load_delta_to_df(
     columns=["PRODUCT_ID", "PRODUCT_NAME", "UNIT_PRICE"]
 )
 
-
-# 3) Truncate all string columns to 30 chars
+# 2) Truncate all string columns to 30 chars
 MAX_WIDTH = 30
 df_current = truncate_strings(df_current, MAX_WIDTH)
 
-# 4) Print neatly with tabulate
+# 3) Print neatly with tabulate
 print("\n=== Current Products ===\n")
 print(tabulate(df_current, headers="keys", tablefmt="psql", showindex=False))
-
-
