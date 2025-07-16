@@ -5,7 +5,7 @@ from tabulate import tabulate
 
 # --- Your Azure Storage Details ---
 storage_account_name = "kkdevuksouthordersdl"
-storage_account_key  = "nr1zzOST8A2werI0OEbuNo3UBr/R6UZdO9H4CSDDKvywBioAWI9MVFDe4RBzDAVWZuzD/VL+1D/5+ASt+l922w=="
+storage_account_key  = "<>"
 container_name       = "raw"
 
 # Set the Azure Storage Account Key for deltalake
